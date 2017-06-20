@@ -15,6 +15,18 @@ struct Matrix<T> {
 
 extension Matrix: ExpressibleByArrayLiteral {
     
+    init(size:Int, with:T) {
+        var back = [[T]]()
+        for _ in 0..<size {
+            var arr = [T]()
+            for _ in 0..<size {
+                arr.append(with)
+            }
+            back.append(arr)
+        }
+        backing = back
+    }
+    
     init(arrayLiteral elements: [T]...) {
         if let count = elements.first?.count {
             for row in elements {
@@ -26,12 +38,12 @@ extension Matrix: ExpressibleByArrayLiteral {
         self.init(backing: elements)
     }
     
-    subscript(row: Int) -> [T] {
+    subscript(row: Int, column: Int) -> T {
         get {
-            return backing[row]
+            return backing[row][column]
         }
         set {
-            backing[row] = newValue
+            backing[row][column] = newValue
         }
     }
     

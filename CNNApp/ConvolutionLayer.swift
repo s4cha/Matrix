@@ -27,28 +27,47 @@ class ConvolutionLayer: Layer {
     
     func runOn(matrix: Matrix<Float>) -> Matrix<Float> {
         
+        var convoluted = fill(matrix, with:0)
+        print(convoluted)
+        
         // Todo find feature alone
         let feature: Matrix<Float> = [
-            [1,0,0],
-            [0,1,0],
-            [0,0,1]
+            [1,-1,-1],
+            [-1,1,-1],
+            [-1,-1,1]
         ]
-//        let newMatrix = replace(value: 0, by: -1, in: matrix)
-//        print("newMatrix")
-//        print(newMatrix)
-//        
-//        let test = multipy(feature, with:factor)
-//        print("Result multiplication")
-//        print(test)
-    
         
-        let convoluted: Matrix<Float> = [
-            [0.77,-12,0,0,1],
-            [-0.11,1,0.33,-0.11, 0],
-            [0,-3, 1,-34,0],
-            [0,-0.345,-0.4,1,0],
-            [0.33,-0.11,-0.4,0,0.77]
-        ]
+        // Feature needs to be ood, feature
+        
+        for i in 0..<matrix.backing.count {
+            for j in 0..<matrix.backing.count {
+                
+                var subMatrix: Matrix<Float> = [
+                    [0,0,0],
+                    [0,0,0],
+                    [0,0,0]
+                ]
+                
+                for fi in 0..<feature.backing.count {
+                    for fj in 0..<feature.backing.count {
+                        let ci = fi - 1 + i
+                        let cj = fj - 1 + j
+                        
+                        var value:Float = 0
+                        if ci >= 0 && cj >= 0
+                            && ci < matrix.backing.count && cj < matrix.backing.count {
+                            value = matrix[ci, cj]
+                        }
+                        subMatrix[fi,fj] = value
+                        let aVal = matrix[i, j]
+                    }
+                }
+                
+                let multiplied = multipy(subMatrix, with:feature)
+                let mean = meanOf(multiplied)
+                convoluted[i, j] = mean
+            }
+        }
         return convoluted
     }
 }

@@ -25,12 +25,7 @@ class PoolingLayer: Layer {
         }
         size = size / 2
         
-        // Matrix of 3.
-        var pooled: Matrix<Float> = [
-            [0,0,0],
-            [0,0,0],
-            [0,0,0]
-        ]
+        var pooled = Matrix<Float>(size:size, with:0)
         
         var pi = 0
         var i = 0
@@ -40,11 +35,11 @@ class PoolingLayer: Layer {
             while j < size*windowSize {
                 let sm = subMatrix(ofSize: windowSize, from: matrix, atX: i, y: j)
                 let max = maxOf(sm)
-                pooled[pi][pj] = max
-                j += windowSize
+                pooled[pi,pj] = max
+                j += stride
                 pj += 1
             }
-            i += windowSize
+            i += stride
             pi += 1
         }
         return pooled

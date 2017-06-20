@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		993831131EF9215800538242 /* ConvolutionalNeuralNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 993831121EF9215800538242 /* ConvolutionalNeuralNetwork.swift */; };
 		99A062331EF91B6F00D67899 /* ConvolutionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A062321EF91B6F00D67899 /* ConvolutionLayer.swift */; };
 		99A062351EF91BCE00D67899 /* Layer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99A062341EF91BCE00D67899 /* Layer.swift */; };
 		99B8D9E41EF8107A00A7F65A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99B8D9E31EF8107A00A7F65A /* AppDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		993831121EF9215800538242 /* ConvolutionalNeuralNetwork.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvolutionalNeuralNetwork.swift; sourceTree = "<group>"; };
 		99A062321EF91B6F00D67899 /* ConvolutionLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConvolutionLayer.swift; sourceTree = "<group>"; };
 		99A062341EF91BCE00D67899 /* Layer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Layer.swift; sourceTree = "<group>"; };
 		99B8D9E01EF8107A00A7F65A /* CNNApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CNNApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,6 +49,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		993831141EF9219E00538242 /* Layers */ = {
+			isa = PBXGroup;
+			children = (
+				99A062341EF91BCE00D67899 /* Layer.swift */,
+				99B8D9F71EF810BE00A7F65A /* RectifiedLinearUnitLayer.swift */,
+				99B8D9F91EF810CA00A7F65A /* PoolingLayer.swift */,
+				99A062321EF91B6F00D67899 /* ConvolutionLayer.swift */,
+			);
+			name = Layers;
+			sourceTree = "<group>";
+		};
 		99B8D9D71EF8107A00A7F65A = {
 			isa = PBXGroup;
 			children = (
@@ -66,14 +79,12 @@
 		99B8D9E21EF8107A00A7F65A /* CNNApp */ = {
 			isa = PBXGroup;
 			children = (
+				993831121EF9215800538242 /* ConvolutionalNeuralNetwork.swift */,
 				99B8D9E31EF8107A00A7F65A /* AppDelegate.swift */,
-				99B8D9E51EF8107A00A7F65A /* ViewController.swift */,
 				99B8D9F51EF8109E00A7F65A /* Matrix.swift */,
 				99B8D9FB1EF810DF00A7F65A /* Matrix+Helpers.swift */,
-				99A062341EF91BCE00D67899 /* Layer.swift */,
-				99B8D9F71EF810BE00A7F65A /* RectifiedLinearUnitLayer.swift */,
-				99B8D9F91EF810CA00A7F65A /* PoolingLayer.swift */,
-				99A062321EF91B6F00D67899 /* ConvolutionLayer.swift */,
+				993831141EF9219E00538242 /* Layers */,
+				99B8D9E51EF8107A00A7F65A /* ViewController.swift */,
 				99B8D9E71EF8107A00A7F65A /* Main.storyboard */,
 				99B8D9EA1EF8107A00A7F65A /* Assets.xcassets */,
 				99B8D9EC1EF8107A00A7F65A /* LaunchScreen.storyboard */,
@@ -155,6 +166,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				99B8D9FC1EF810DF00A7F65A /* Matrix+Helpers.swift in Sources */,
+				993831131EF9215800538242 /* ConvolutionalNeuralNetwork.swift in Sources */,
 				99B8D9F81EF810BE00A7F65A /* RectifiedLinearUnitLayer.swift in Sources */,
 				99A062331EF91B6F00D67899 /* ConvolutionLayer.swift in Sources */,
 				99A062351EF91BCE00D67899 /* Layer.swift in Sources */,
