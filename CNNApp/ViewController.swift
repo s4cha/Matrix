@@ -69,7 +69,7 @@ class ViewController: UIViewController {
 class ConvolutionalNeuralNetwork {
     func isCross(_ matrix: Matrix<Float>) -> Bool {
         
-        var layers: [Layer] = [
+        let layers: [Layer] = [
             ConvolutionLayer(),
             RectifiedLinearUnitLayer(),
             PoolingLayer()
