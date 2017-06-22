@@ -15,9 +15,7 @@ class RectifiedLinearUnitLayer: Layer {
         var newMatrix = matrix
         for i in 0..<matrix.backing.count {
             for j in 0..<matrix.backing.count {
-                if matrix[i,j] < 0 {
-                    newMatrix[i,j] = 0
-                }
+                newMatrix[i,j] = max(matrix[i,j], 0)
             }
         }
         return newMatrix

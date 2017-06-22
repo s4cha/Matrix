@@ -18,7 +18,6 @@ class PoolingLayer: Layer {
     }
     
     private func runOn(matrix: Matrix<Float>, windowSize:Int, stride: Int) -> Matrix<Float> {
-        print("Pooled Matrix Size")
         var size = matrix.backing.count
         if size % 2 != 0 {
             size += 1

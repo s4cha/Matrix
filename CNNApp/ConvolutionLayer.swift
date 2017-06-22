@@ -26,26 +26,32 @@ import Foundation
 class ConvolutionLayer: Layer {
     
     func runOn(matrix: Matrix<Float>) -> Matrix<Float> {
-        
-        var convoluted = fill(matrix, with:0)
-        print(convoluted)
-        
         // Todo find feature alone
         let feature: Matrix<Float> = [
-            [1,-1,-1],
-            [-1,1,-1],
-            [-1,-1,1]
+            [-1,-1,-1],
+            [-1,-1,-1],
+            [-1,-1,-1]
         ]
-        
+        return runOn(matrix: matrix, withFeature:feature)
+    }
+    
+    func runOn(matrix: Matrix<Float>, withFeature feature:Matrix<Float>) -> Matrix<Float> {
+        var convoluted = fill(matrix, with:0)
+//        print(convoluted)
         // Feature needs to be ood, feature
         
         for i in 0..<matrix.backing.count {
             for j in 0..<matrix.backing.count {
                 
+//                var subMatrix: Matrix<Float> = [
+//                    [0,0,0],
+//                    [0,0,0],
+//                    [0,0,0]
+//                ]
+                
                 var subMatrix: Matrix<Float> = [
-                    [0,0,0],
-                    [0,0,0],
-                    [0,0,0]
+                    [0,0],
+                    [0,0]
                 ]
                 
                 for fi in 0..<feature.backing.count {
