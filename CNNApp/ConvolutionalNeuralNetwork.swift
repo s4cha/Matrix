@@ -24,7 +24,7 @@ struct Params {
         static let numberOfNeurons = 3
     }
     
-    static let learningRate: Float = 1
+    static let learningRate: Float = 2
 }
 
 class ConvolutionalNeuralNetwork {
@@ -50,70 +50,44 @@ class ConvolutionalNeuralNetwork {
         
         var previouslyChangedThatWeight = false
         
-        for _ in 0...10 { //M
+        for _ in 0...1 { //M
+            
         var isReducingGlobalErrorRate = true
-        
         var tunedWeightIndex = 0
         var windex = 0
-        
+        var bestWeight:Float = 1333
+            
         while isReducingGlobalErrorRate {
-            
-            
             var errors:Float = 0
-            
             for sample in trainingData {
                 let matrix = sample.0
-//                print("matrix: \(matrix)")
                 let minusMatrix = replace(value: 0, by: -1, in: matrix)
                 let correctPrediction = sample.1
-                
-//                print("is X: \(correctPrediction)")
-                //            var isReducingErrorRate = true
-                
-                //            while isReducingErrorRate {
                 let prediction = predict(minusMatrix)
                 let numberOfPredictions:Float = 2
                 
                 print(correctPrediction)
-                print(prediction)
+                print("🤔 prediction[0] : \(prediction[0])")
                 
-                let errorRate = (abs(correctPrediction[0]-prediction[0])
-                    + abs(correctPrediction[1]-prediction[1]))
-                    / numberOfPredictions
-//                print(errorRate)
+                let errorRate = (abs(correctPrediction[0]-prediction[0])  )
+                print("🤔 ERRROR : \(errorRate)")
                 
-//                if errorRate < previousErrorRate{
-//                    print("Walking down the gradient!")
-//                    isReducingErrorRate = true
-//                    
-//                    
-//                    
-//                    //try to tune weigths and do it again.
-//                    
-//                    fullyConectedLayer.weights[0][0] += 0.1
-//                    
-//                    
-//                    
-//                } else {
-//                    print("Walking up the gradient!")
-//                    isReducingErrorRate = false
-//                }
-//            }
-            
-            
-            
-            
                 errors += errorRate
             }
             
-            let globalErrorRate = errors / Float(trainingData.count)
+            let globalErrorRate = errors /// Float(trainingData.count)
             
             print("globalErrorRate :\(globalErrorRate)")
             print("previousErrorRate :\(previousGlobalErrorRate)")
-            print("weights[0] = :\(fullyConectedLayer.weights[0])")
-            print("weights[1] = :\(fullyConectedLayer.weights[1])")
+            print("Tryin with weight[0] : -------   \(fullyConectedLayer.weights[0])")
             
             
+//            print("weights[1] = :\(fullyConectedLayer.weights[1])")
+            
+            
+            if globalErrorRate == 0 {
+                break
+            }
             
             
             minError = min(previousGlobalErrorRate,minError)
@@ -123,46 +97,53 @@ class ConvolutionalNeuralNetwork {
             }
             
             
-    
-            if globalErrorRate < previousGlobalErrorRate {
-                //                print("Walking down the gradient!")
-                
-                //try to tune weigths and do it again.
-                
-                fullyConectedLayer.weights[windex][tunedWeightIndex] += learningRate
-                previouslyChangedThatWeight = true
-                
+            let isReducingError = globalErrorRate < previousGlobalErrorRate
+            let reachedEndOfWeight = fullyConectedLayer.weights[windex][tunedWeightIndex] == 1
+            
+            
+            print("isReducingError : -------   \(isReducingError)")
+            
+            if isReducingError {
                 previousGlobalErrorRate = globalErrorRate
-            } else {
-                //                print("Walking up the gradient!")
                 
-                if previouslyChangedThatWeight {
-                    // set back previous params where it was and go to new param.
-                    fullyConectedLayer.weights[windex][tunedWeightIndex] -= learningRate
-                    previouslyChangedThatWeight = false
-//                    fullyConectedLayer.weights[windex][tunedWeightIndex] += step
-                } else {
-                    print("noope")
-                }
+                
+                bestWeight = fullyConectedLayer.weights[windex][tunedWeightIndex]
+            }
+            
+    
+//            if isReducingError && !reachedEndOfWeight {
+//                fullyConectedLayer.weights[windex][tunedWeightIndex] += Params.learningRate
+//            }
+            
+            if reachedEndOfWeight {
+                // Keep best weight
+                fullyConectedLayer.weights[windex][tunedWeightIndex] = bestWeight
                 
                 // GO TRY ADJUST NEXT PARAM
                 tunedWeightIndex += 1
-  
+                fullyConectedLayer.weights[windex][tunedWeightIndex] += Params.learningRate
+                bestWeight = -1
+            } else {
+                
+//                keep going
+                fullyConectedLayer.weights[windex][tunedWeightIndex] += Params.learningRate
             }
             
             
             
+        
             
             if tunedWeightIndex == 3 && windex == 0 {
+                isReducingGlobalErrorRate = false //Break
                 windex = 1
                 
                 tunedWeightIndex = 0
 //                previousGlobalErrorRate = globalErrorRate
             }
-            
-            if tunedWeightIndex == 3 && windex == 1 {
-               isReducingGlobalErrorRate = false
-            }
+//
+//            if tunedWeightIndex == 3 && windex == 1 {
+//               isReducingGlobalErrorRate = false
+//            }
             
             
     
@@ -171,94 +152,38 @@ class ConvolutionalNeuralNetwork {
             
         }
         }
-        
-        //        for x in xs {
-        //            let minusMatrix = replace(value: 0, by: -1, in: x)
-        //            let correctAnswer = true
-        //            cnn.feed(minusMatrix)
-        //            while cnn.predictIsCross() != correctAnswer {
-        //                cnn.wrongAnswer(correctAnswer:correctAnswer)
-        //            }
-        //            print(cnn.Xweights)
-        //        }
-        //
-        
-        
-        
+        print("Trained")
     }
     
     func predict(_ matrix: Matrix<Float>) -> [Float] {
     
-        
-        // Convolution
-//        let feature1: Matrix<Float> = [
-//            [1,-1,-1],
-//            [-1,1,-1],
-//            [-1,-1,1]
-//        ]
         let feature1: Matrix<Float> = [
             [1,-1],
             [-1,1],
         ]
         let c1 = convolution.runOn(matrix: matrix, withFeature: feature1)
-        let feature2: Matrix<Float> = [
-            [-1,-1,1],
-            [-1,1,-1],
-            [1,-1,-1]
-        ]
-//        let c2 = convolution.runOn(matrix: matrix, withFeature: feature2)
-//        let feature3: Matrix<Float> = [
-//            [1,-1,1],
-//            [-1,1,-1],
-//            [1,-1,1]
-//        ]
-//        let feature3: Matrix<Float> = [
-//            [-1,-1,-1],
-//            [-1,-1,-1],
-//            [-1,-1,-1]
-//        ]
-        //let c3 = convolution.runOn(matrix: matrix, withFeature: feature3)
-//        
 //        print("Convolution")
 //        print(c1)
-//        print(c2)
-//        print(c3)
         
         // ReLU
         let r1 = reLU.runOn(matrix: c1)
-//        let r2 = reLU.runOn(matrix: c2)
-//        let r3 = reLU.runOn(matrix: c3)
-        
-//        print("RectifiedLinearUnitLayer")
+//        print("RelU")
 //        print(r1)
-//        print(r2)
-//        print(r3)
         
         // Pooling
-        let p1 = pooling.runOn(matrix: r1)
-//        let p2 = pooling.runOn(matrix: r2)
-//        let p3 = pooling.runOn(matrix: r3)
+        var p1 = pooling.runOn(matrix: r1)
+
+        p1 = replace(value: 0, by: -1, in: p1)
         
 //        print("Pooling")
 //        print(p1)
-//        print(p2)
-//        print(p3)
-        
-        // 2nd Pooling
-        //        let pooling = PoolingLayer()
-        //        let p21 = pooling.runOn(matrix: p1)
-        //        let p22 = pooling.runOn(matrix: p2)
-        //        let p23 = pooling.runOn(matrix: p3)
-        //
-        //
-        //        print(p21)
-        //        print(p22)
-        //        print(p23)
         
         
         let prediction = fullyConectedLayer.runOn(matrices: [p1])
-//        let prediction = fullyConectedLayer.runOn(matrices: [p1, p2, p3])
-        
+//
+//        print("Prediction")
+//        print(prediction)
+//        
         return prediction
     }
 //    
@@ -345,8 +270,8 @@ class FullyConectedLayer {
             }
         }
         
-//        print("linearVotes")
-//        print(linearVotes)
+        print("linearVotes")
+        print(linearVotes)
         
         
         // Initialize with defaut weights of 1
@@ -354,7 +279,7 @@ class FullyConectedLayer {
         for i in 0..<2 {
             if weights[i].isEmpty {
                 for _ in linearVotes {
-                    weights[i].append(1)
+                    weights[i].append(-1)
                 }
             }
         }
@@ -362,6 +287,9 @@ class FullyConectedLayer {
 //        print("weights")
 //        print(weights)
         
+        
+        // Clean weightedVotes
+        weightedVotes = [[Float](), [Float]()]
         
         // Weighted Votes
         for k in 0..<2 {
@@ -371,8 +299,8 @@ class FullyConectedLayer {
             }
         }
         
-//        print("weightedVotes")
-//        print(weightedVotes)
+        print("weightedVotes")
+        print(weightedVotes)
         
         var predictions = [Float]()
         for i in 0..<2 {

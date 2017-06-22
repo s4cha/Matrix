@@ -212,9 +212,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         for x in xs {
             trainingData.append((x,[1,0]))
         }
-        for notx in notxs {
-            trainingData.append((notx,[0,1]))
-        }
+//        for notx in notxs {
+//            trainingData.append((notx,[0,1]))
+//        }
         
         
         // Train CNN
