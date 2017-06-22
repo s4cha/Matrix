@@ -27,6 +27,18 @@ extension Matrix: ExpressibleByArrayLiteral {
         backing = back
     }
     
+    init(ofShape:(Int, Int), with:T) {
+        var back = [[T]]()
+        for _ in 0..<ofShape.0 {
+            var arr = [T]()
+            for _ in 0..<ofShape.1 {
+                arr.append(with)
+            }
+            back.append(arr)
+        }
+        backing = back
+    }
+    
     init(arrayLiteral elements: [T]...) {
         if let count = elements.first?.count {
             for row in elements {
@@ -49,6 +61,10 @@ extension Matrix: ExpressibleByArrayLiteral {
     
     var numberOfLines:Int {
         return backing.count
+    }
+    
+    var numberOfColomns:Int {
+        return backing[0].count
     }
 }
 

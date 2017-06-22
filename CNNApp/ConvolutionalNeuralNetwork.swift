@@ -50,12 +50,12 @@ class ConvolutionalNeuralNetwork {
         
         var previouslyChangedThatWeight = false
         
-        for _ in 0...1 { //M
+        for _ in 0...10 { //M
             
         var isReducingGlobalErrorRate = true
         var tunedWeightIndex = 0
         var windex = 0
-        var bestWeight:Float = 1333
+        var bestWeight:Float = -1
             
         while isReducingGlobalErrorRate {
             var errors:Float = 0
@@ -66,18 +66,21 @@ class ConvolutionalNeuralNetwork {
                 let prediction = predict(minusMatrix)
                 let numberOfPredictions:Float = 2
                 
-                print(correctPrediction)
-                print("🤔 prediction[0] : \(prediction[0])")
+//                print(correctPrediction)
+//                print("🤔 prediction : \(prediction)")
                 
-                let errorRate = (abs(correctPrediction[0]-prediction[0])  )
-                print("🤔 ERRROR : \(errorRate)")
+                let errorRate = (abs(correctPrediction[0]-prediction[0])
+                    + abs(correctPrediction[1]-prediction[1]))
+                    / numberOfPredictions
+                //                print(errorRate)
+//                print("🤔 ERRROR : \(errorRate)")
                 
                 errors += errorRate
             }
             
-            let globalErrorRate = errors /// Float(trainingData.count)
+            let globalErrorRate = errors / Float(trainingData.count)
             
-            print("globalErrorRate :\(globalErrorRate)")
+            print(" 🚨 Global Error :\(globalErrorRate)")
             print("previousErrorRate :\(previousGlobalErrorRate)")
             print("Tryin with weight[0] : -------   \(fullyConectedLayer.weights[0])")
             
@@ -86,6 +89,10 @@ class ConvolutionalNeuralNetwork {
             
             
             if globalErrorRate == 0 {
+                break
+            }
+            
+            if globalErrorRate < 0.2 {
                 break
             }
             
@@ -131,19 +138,23 @@ class ConvolutionalNeuralNetwork {
             
             
             
+            if fullyConectedLayer.weights[windex][tunedWeightIndex] > 1 {
+                print("wtf")
+            }
+            
         
             
             if tunedWeightIndex == 3 && windex == 0 {
-                isReducingGlobalErrorRate = false //Break
+//                isReducingGlobalErrorRate = false //Break
                 windex = 1
                 
                 tunedWeightIndex = 0
 //                previousGlobalErrorRate = globalErrorRate
             }
 //
-//            if tunedWeightIndex == 3 && windex == 1 {
-//               isReducingGlobalErrorRate = false
-//            }
+            if tunedWeightIndex == 3 && windex == 1 {
+               isReducingGlobalErrorRate = false
+            }
             
             
     
@@ -152,7 +163,11 @@ class ConvolutionalNeuralNetwork {
             
         }
         }
+        
         print("Trained")
+        print("Found Weights")
+        print("weight[0] : -------   \(fullyConectedLayer.weights[0])")
+        print("weight[1] : -------   \(fullyConectedLayer.weights[1])")
     }
     
     func predict(_ matrix: Matrix<Float>) -> [Float] {
@@ -270,8 +285,8 @@ class FullyConectedLayer {
             }
         }
         
-        print("linearVotes")
-        print(linearVotes)
+//        print("linearVotes")
+//        print(linearVotes)
         
         
         // Initialize with defaut weights of 1
@@ -298,10 +313,10 @@ class FullyConectedLayer {
                 weightedVotes[k].append(v*weight)
             }
         }
-        
-        print("weightedVotes")
-        print(weightedVotes)
-        
+//        
+//        print("weightedVotes")
+//        print(weightedVotes)
+//        
         var predictions = [Float]()
         for i in 0..<2 {
             var addition:Float = 0
