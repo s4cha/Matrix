@@ -9,10 +9,95 @@
 import UIKit
 
 
+ let kEuler:Float = 2.71828182846
+
+extension Matrix where T == Float {
+    var transpose:Matrix<Float> {
+        var m = Matrix(ofShape: (shape.1, shape.0), with: 0)
+        for i in 0..<m.numberOfLines {
+            for j in 0..<m.numberOfColomns {
+                m[i, j] = self[j, i]
+            }
+        }
+        return m
+    }
+}
+
 extension Matrix {
     var shape:(Int, Int) {
         return (numberOfLines, numberOfColomns)
     }
+}
+
+func - (l:Float, r:Matrix<Float>) -> Matrix<Float> {
+    var m = r
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            m[i, j] = l - m[i, j]
+        }
+    }
+    return m
+}
+
+func + (l:Float, r:Matrix<Float>) -> Matrix<Float> {
+    var m = r
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            m[i, j] = l + m[i, j]
+        }
+    }
+    return m
+}
+
+func / (l:Float, r:Matrix<Float>) -> Matrix<Float> {
+    var m = r
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            m[i, j] = l / m[i, j]
+        }
+    }
+    return m
+}
+
+
+prefix func - (r:Matrix<Float>) -> Matrix<Float> {
+    var m = r
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            m[i, j] = -m[i, j]
+        }
+    }
+    return m
+}
+
+func - (l:Matrix<Float>, r:Matrix<Float>) throws -> Matrix<Float> {
+    if l.shape != r.shape {
+        throw MatrixError.defaultError
+    }
+    var m = r
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            m[i, j] = l[i, j] - r[i, j]
+        }
+    }
+    return m
+}
+
+func + (l:Matrix<Float>, r:Matrix<Float>) throws -> Matrix<Float> {
+    if l.shape != r.shape {
+        throw MatrixError.defaultError
+    }
+    var m = r
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            m[i, j] = l[i, j] + r[i, j]
+        }
+    }
+    return m
+}
+
+func * (l:Matrix<Float>, r:Matrix<Float>) -> Matrix<Float> {
+    return multipy(l, with: r)
 }
 
 enum MatrixError: Error {
@@ -24,7 +109,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-//    
+    func exp(_ matrix:Matrix<Float>) -> Matrix<Float> {
+        var m = matrix
+        for i in 0..<m.numberOfLines {
+            for j in 0..<m.numberOfColomns {
+                m[i, j] = pow(kEuler,  matrix[i, j])
+            }
+        }
+        return m
+    }
+    
+    func nonlin(x:Matrix<Float>, deriv:Bool = false) -> Matrix<Float> {
+        if deriv {
+            return x*(1-x)
+        }
+        return 1 / (1 + exp(-x))
+    }
+    
     func matrixMultiplication(m1:Matrix<Float>, m2:Matrix<Float>) throws -> Matrix<Float> {
         if m1.shape.1 != m2.shape.0 {
             throw MatrixError.defaultError
@@ -47,11 +148,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         
         
+        print(pow(10, kEuler))
+        print(pow(1, kEuler))
+        
+        print(pow(kEuler, 10))
+        
         let t1:Matrix<Float> = [
             [5, 1],
             [2, 3],
             [3, 4]
         ]
+    
         
         let t2:Matrix<Float> = [
             [1,2,0],
@@ -78,21 +185,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             [1,1,1]
         ]
         
+        
+    
+        
+        print(nonlin(x: X))
+        
         print(X.shape)
         
 //        // output dataset
-//        let Y: Matrix<Float> = [
-//            [0],
-//            [0],
-//            [1],
-//            [1]
-//        ]
-        
         let Y: Matrix<Float> = [
-            [0, 0, 1, 1],
+            [0],
+            [0],
+            [1],
+            [1]
         ]
-        
-        print(Y.shape)
        
         // seed random numbers to make calculation
         // deterministic (just a good practice)
@@ -100,34 +206,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        
         // initialize weights randomly with mean 0
         //2*np.random.random((3,1)) - 1
-        let syn0 = [
+        var syn0:Matrix<Float> = [
             [-0.16595599],
             [ 0.44064899],
             [-0.99977125]
         ]
         
-        for i in 0...1000 {
+        var l1:Matrix<Float>!
+        for _ in 0...10 {
             // forward propagation
             let l0 = X
-    //        l1 = nonlin(np.dot(l0,syn0))
-    //        
-    //        # how much did we miss?
-    //        l1_error = y - l1
-    //        
-    //        # multiply how much we missed by the
-    //        # slope of the sigmoid at the values in l1
-    //        l1_delta = l1_error * nonlin(l1,True)
-    //        
-    //        # update weights
-    //        syn0 += np.dot(l0.T,l1_delta)
-            }
+            
+            let product = try! matrixMultiplication(m1: l0, m2: syn0)
+            l1 = nonlin(x: product)
+            print(l1)
+            // how much did we miss?
+            let l1_error = try! Y - l1
+    
+            // multiply how much we missed by the
+            // slope of the sigmoid at the values in l1
+            let l1_delta = l1_error * nonlin(x: l1,deriv: true)
+            print(l1_delta)
+            
+            // update weights
+            syn0 = try! syn0 + matrixMultiplication(m1:l0.transpose, m2:l1_delta)
+        }
 //        
-//        print "Output After Training:"
-//        print l1
+        print("Output After Training:")
+        print(l1)
 
         
         
-        run()
+//        run()
         return true
     }
 

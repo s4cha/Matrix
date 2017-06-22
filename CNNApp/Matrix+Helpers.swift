@@ -10,8 +10,8 @@ import Foundation
 
 func multipy(_ matrix:Matrix<Float>, with:Matrix<Float>) -> Matrix<Float> {
     var newMatrix = matrix
-    for i in 0..<matrix.backing.count {
-        for j in 0..<matrix.backing.count {
+    for i in 0..<matrix.numberOfLines {
+        for j in 0..<matrix.numberOfColomns {
             let v = matrix[i,j]
             let v2 = with[i,j]
             newMatrix[i,j] = v*v2
