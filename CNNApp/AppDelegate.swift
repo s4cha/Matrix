@@ -146,37 +146,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
-        
-        
-        print(pow(10, kEuler))
-        print(pow(1, kEuler))
-        
-        print(pow(kEuler, 10))
-        
-        let t1:Matrix<Float> = [
-            [5, 1],
-            [2, 3],
-            [3, 4]
-        ]
-    
-        
-        let t2:Matrix<Float> = [
-            [1,2,0],
-            [4,3,-1]
-        ]
-        
-        let multiplied = try! matrixMultiplication(m1:t1, m2: t2)
-        print(multiplied.shape)
-        print(multiplied)
-        
-    
-        
-//        # sigmoid function
-//        def nonlin(x,deriv=False):
-//        if(deriv==True):
-//        return x*(1-x)
-//        return 1/(1+np.exp(-x))
-        
         // Input dataset
         let X: Matrix<Float> = [
             [0,0,1],
@@ -185,14 +154,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             [1,1,1]
         ]
         
-        
-    
-        
-        print(nonlin(x: X))
-        
-        print(X.shape)
-        
-//        // output dataset
+        // output dataset
         let Y: Matrix<Float> = [
             [0],
             [0],
@@ -241,6 +203,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
+    
+    
+    
+    
+    
+    
+    
 
     func run() {
         print("PARAMS")
