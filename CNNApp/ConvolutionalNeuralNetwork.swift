@@ -201,68 +201,6 @@ class ConvolutionalNeuralNetwork {
 //        
         return prediction
     }
-//    
-//    func predictIsCross() -> Bool {
-//        // X Result :
-//        var weightedXVotes = [Float]()
-//        for (i,v) in linearVotes.enumerated() {
-//            let weight = Xweights[i]
-//            weightedXVotes.append(v*weight)
-//        }
-//        var additionX:Float = 0
-//        for v in weightedXVotes {
-//            additionX += v
-//        }
-//        
-//        let xResult = additionX / Float(linearVotes.count)
-//        
-//        previousResult = xResult
-//    
-//        return xResult > 0.8
-//    }
-    
-//    func wrongAnswer(correctAnswer:Bool) {
-//        
-//        
-//        // calculate error 
-//        
-//        var correctPrediction:[Float] = correctAnswer ? [1,0] : [1,0]
-//        var prediction
-//        
-//        Xweights[0] = Xweights[0] + 1
-//        
-//        _ = predictIsCross()
-//        
-//        //better error rate?
-//        
-//        
-////        // change weight at index 0 and see if error is better.
-////       
-////        
-////
-//        var errorRate:Float = 0
-//        if correctAnswer {
-//            errorRate = 1 - previousResult
-//        } else {
-//            errorRate = previousResult
-//        }
-//    
-//        print(errorRate)
-//        
-//        
-//        if errorRate < previousErrorRate {
-//            //Keep GOing
-//            print("Keep GOing")
-//        } else {
-//            //
-//            print("Stop")
-//        }
-////        var totalErrorRate = 0
-////
-//        
-//        previousErrorRate = errorRate
-        
-//    }
 }
 
 

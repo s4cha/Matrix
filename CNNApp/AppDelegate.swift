@@ -15,9 +15,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         
+        let randomNumber = arc4random()
+        print(randomNumber)
+        
         
         let twoLayersNN = TwoLayerNeuralNet()
-        twoLayersNN.run3()
+        twoLayersNN.run5()
         
         
         // Input dataset

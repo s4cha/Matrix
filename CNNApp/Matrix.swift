@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 struct Matrix<T> {
     var backing:[[T]]
 }

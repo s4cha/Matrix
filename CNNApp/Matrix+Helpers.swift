@@ -8,6 +8,18 @@
 
 import Foundation
 
+func randomMatrix(ofShape: (Int, Int)) -> Matrix<Float> {
+    var m = Matrix<Float>(ofShape: ofShape, with: 0)
+    var t = 0
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            let rand:Float = Float(arc4random_uniform(10000)) / 10000.0
+            m[i, j] = rand
+        }
+    }
+    return m
+}
+
 func flatten(_ matrix: Matrix<Float>) -> Matrix<Float> {
     var m = Matrix<Float>(ofShape: (1, matrix.shape.0 * matrix.shape.1), with: 0)
     var t = 0
@@ -176,6 +188,16 @@ func - (l:Float, r:Matrix<Float>) -> Matrix<Float> {
     return m
 }
 
+func - (l:Matrix<Float>, r:Float) -> Matrix<Float> {
+    var m = l
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            m[i, j] = m[i, j] - r
+        }
+    }
+    return m
+}
+
 func + (l:Float, r:Matrix<Float>) -> Matrix<Float> {
     var m = r
     for i in 0..<m.numberOfLines {
@@ -191,6 +213,16 @@ func / (l:Float, r:Matrix<Float>) -> Matrix<Float> {
     for i in 0..<m.numberOfLines {
         for j in 0..<m.numberOfColomns {
             m[i, j] = l / m[i, j]
+        }
+    }
+    return m
+}
+
+func * (l:Float, r:Matrix<Float>) -> Matrix<Float> {
+    var m = r
+    for i in 0..<m.numberOfLines {
+        for j in 0..<m.numberOfColomns {
+            m[i, j] = l * m[i, j]
         }
     }
     return m
